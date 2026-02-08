@@ -158,10 +158,58 @@
   }
 }
 
+/* Animated background orbs */
+.animated-bg {
+  background: transparent;
+}
+
+.bg-gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.bg-orb-1 {
+  width: 40vmax;
+  height: 40vmax;
+  left: -10%;
+  top: -10%;
+  background: radial-gradient(circle, rgba(196, 69, 105, 0.4) 0%, transparent 70%);
+}
+
+.bg-orb-2 {
+  width: 35vmax;
+  height: 35vmax;
+  right: -15%;
+  bottom: -10%;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.35) 0%, transparent 70%);
+}
+
+.bg-orb-3 {
+  width: 30vmax;
+  height: 30vmax;
+  left: 50%;
+  bottom: -5%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(232, 160, 191, 0.3) 0%, transparent 70%);
+}
+
 /* Confetti / burst */
 .burst-layer {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 40;
+}
+
+/* Shimmer for buttons */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.btn-yes.shimmer {
+  background: linear-gradient(90deg, var(--rose-deep), var(--rose-mid), var(--gold-light), var(--rose-mid), var(--rose-deep));
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
 }
