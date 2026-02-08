@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --rose-deep: #8b2942;
+  --rose-mid: #c44569;
+  --rose-soft: #e8a0bf;
+  --rose-pale: #fce4ec;
+  --gold: #d4a853;
+  --gold-light: #f5e6c8;
+  --bg-dark: #1a0a0f;
+  --bg-gradient: linear-gradient(160deg, #1a0a0f 0%, #2d1520 40%, #1a0a0f 100%);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+  background: var(--bg-gradient);
+  color: var(--rose-pale);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  min-width: 100vw;
+  position: relative;
+}
+
+button {
+  font-family: var(--font-display);
+  cursor: pointer;
+}
