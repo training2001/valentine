@@ -1,17 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FloatingHearts from './components/FloatingHearts';
 import CelebrationBurst from './components/CelebrationBurst';
 import FullScreenHearts from './components/FullScreenHearts';
 import './App.css';
 
+const ACCEPTED_IMAGES_DURATION_MS = 3500; // 3.5 seconds of only flowers/hearts
+
+const NO_BUTTON_LABELS = [
+  'No',
+  'Are you sure, NO',
+  'Definitely No 😟😔',
+  'Say Yes something special for you 😔',
+  'Say Yes something special for you 😔',
+  'Say Yes 💕',
+];
+
 function App() {
   const [step, setStep] = useState('intro'); // 'intro' | 'proposal' | 'accepted'
-  const [noHover, setNoHover] = useState(false);
+  const [noClickCount, setNoClickCount] = useState(0);
+  const [showAcceptedText, setShowAcceptedText] = useState(false);
 
   const handleYes = () => {
     setStep('accepted');
+    setShowAcceptedText(false);
   };
+
+  const handleNoClick = () => {
+    if (noClickCount >= 5) {
+      handleYes();
+      return;
+    }
+    setNoClickCount((c) => c + 1);
+  };
+
+  // After "Yes": show only images for 3–4s, then reveal text
+  useEffect(() => {
+    if (step !== 'accepted') return;
+    const t = setTimeout(() => setShowAcceptedText(true), ACCEPTED_IMAGES_DURATION_MS);
+    return () => clearTimeout(t);
+  }, [step]);
 
   return (
     <div className="app">
@@ -41,7 +69,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              For Gayathri 💕
+              For Gayathri Miss💕
             </motion.h1>
             <motion.p
               className="subtitle"
@@ -88,7 +116,7 @@ function App() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
             >
-              Gayathri, will you be my Valentine? 💝
+              Gayathri Sri, will you be my Valentine? 💝
             </motion.p>
             <div className="buttons-wrap">
               <motion.button
@@ -103,18 +131,15 @@ function App() {
                 Yes! 💕
               </motion.button>
               <motion.button
-                className="btn btn-no"
+                className={noClickCount >= 5 ? 'btn btn-yes' : 'btn btn-no'}
+                onClick={handleNoClick}
                 initial={{ opacity: 0, x: 20 }}
-                animate={{
-                  opacity: 1,
-                  x: noHover ? 180 : 0,
-                }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                onMouseEnter={() => setNoHover(true)}
-                onMouseLeave={() => setNoHover(false)}
-                whileTap={{ scale: 0.9 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
               >
-                No
+                {NO_BUTTON_LABELS[noClickCount]}
+                {noClickCount === 4 && ' 💘'}
+                {noClickCount >= 5 && ' 💔'}
               </motion.button>
             </div>
           </motion.section>
@@ -124,59 +149,64 @@ function App() {
           <>
             <CelebrationBurst />
             <FullScreenHearts />
-            <motion.section
-              key="accepted"
-              className="section accepted-screen"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-              >
-                <motion.h1
-                  className="greeting-title"
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    textShadow: [
-                      '0 0 40px rgba(212, 168, 83, 0.6)',
-                      '0 0 60px rgba(212, 168, 83, 0.9)',
-                      '0 0 40px rgba(212, 168, 83, 0.6)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
+            <AnimatePresence>
+              {showAcceptedText && (
+                <motion.section
+                  key="accepted-text"
+                  className="section accepted-screen"
+                  initial={{ opacity: 0, scale: 0.2 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  You said YES! 🎉
-                </motion.h1>
-                <motion.p
-                  className="greeting-sub"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  Proposal Accepted 💍
-                </motion.p>
-              </motion.div>
-              <motion.p
-                className="proposal-text"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-                style={{ maxWidth: '32ch', margin: '1rem auto 0' }}
-              >
-                Gayathri, you make every day special. Thank you for saying yes. Here’s to many more Valentines together. Love, Manikandan 💕
-              </motion.p>
-              <motion.p
-                className="from-mani"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.5 }}
-              >
-                — With love, Manikandan
-              </motion.p>
-            </motion.section>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                  >
+                    <motion.h1
+                      className="greeting-title"
+                      animate={{
+                        scale: [1, 1.05, 1],
+                        textShadow: [
+                          '0 0 40px rgba(212, 168, 83, 0.6)',
+                          '0 0 60px rgba(212, 168, 83, 0.9)',
+                          '0 0 40px rgba(212, 168, 83, 0.6)',
+                        ],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
+                    >
+                      You said YES! 🎉
+                    </motion.h1>
+                    <motion.p
+                      className="greeting-sub"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5, duration: 0.5 }}
+                    >
+                      Proposal Accepted 💍
+                    </motion.p>
+                  </motion.div>
+                  <motion.p
+                    className="proposal-text"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.5 }}
+                    style={{ maxWidth: '32ch', margin: '1rem auto 0' }}
+                  >
+                Gayathri Ma, you make every day special. Thank you for saying yes. Here’s to many more Valentines together. Love, Manikandan 💕
+                  </motion.p>
+                  <motion.p
+                    className="from-mani"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1, duration: 0.5 }}
+                  >
+                    — With love, Manikandan
+                  </motion.p>
+                </motion.section>
+              )}
+            </AnimatePresence>
           </>
         )}
       </AnimatePresence>
