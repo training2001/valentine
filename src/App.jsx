@@ -12,8 +12,11 @@ const NO_BUTTON_LABELS = [
   'Are you sure, NO',
   'Definitely No 😟😔',
   'Say Yes something special for you 😔',
-  'Say Yes something special for you 😔',
-  'Say Yes 💕',
+  'Press yes 👈🏻👈🏻👈🏻',
+  '👈🏻👈🏻',
+  '👈🏻👈🏻',
+  '', // 7: show only 💘
+  '', // 8: show only 💔
 ];
 
 function App() {
@@ -27,7 +30,7 @@ function App() {
   };
 
   const handleNoClick = () => {
-    if (noClickCount >= 5) {
+    if (noClickCount >= 8) {
       handleYes();
       return;
     }
@@ -69,7 +72,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              For Gayathri Miss💕
+              For Gayathri miss💕
             </motion.h1>
             <motion.p
               className="subtitle"
@@ -116,7 +119,7 @@ function App() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
             >
-              Gayathri Sri, will you be my Valentine? 💝
+              Gayathri sri, will you be my Valentine? 💝
             </motion.p>
             <div className="buttons-wrap">
               <motion.button
@@ -131,15 +134,13 @@ function App() {
                 Yes! 💕
               </motion.button>
               <motion.button
-                className={noClickCount >= 5 ? 'btn btn-yes' : 'btn btn-no'}
+                className="btn btn-no"
                 onClick={handleNoClick}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                {NO_BUTTON_LABELS[noClickCount]}
-                {noClickCount === 4 && ' 💘'}
-                {noClickCount >= 5 && ' 💔'}
+                {noClickCount === 7 ? '💘' : noClickCount >= 8 ? '💔' : NO_BUTTON_LABELS[noClickCount]}
               </motion.button>
             </div>
           </motion.section>
@@ -194,7 +195,7 @@ function App() {
                     transition={{ delay: 0.7, duration: 0.5 }}
                     style={{ maxWidth: '32ch', margin: '1rem auto 0' }}
                   >
-                Gayathri Ma, you make every day special. Thank you for saying yes. Here’s to many more Valentines together. Love, Manikandan 💕
+                Gayu ma, you make every day special. I will respect and take care of you for entire life. Here’s to many more Valentines together. Love, Manikandan 💕
                   </motion.p>
                   <motion.p
                     className="from-mani"
